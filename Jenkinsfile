@@ -1,6 +1,6 @@
 def project = 'r-poc-247201'
 def appName = 'test-database'
-def imageTag = "gcr.io/${project}/${appName}:${env.BRANCH_NAME}.${env.BUILD_NUMBER}"
+def imageTag = "gcr.io/${project}/${appName}:MASTER.${env.BUILD_NUMBER}"
 
 pipeline {
     agent any
@@ -30,14 +30,14 @@ pipeline {
         stage('Build & Push Image') {
             steps {
                 sh """
-                PYTHONUNBUFFERED=1 /snap/bin/gcloud builds submit -t ${imageTag} .
+                PYTHONUNBUFFERED=1 /usr/bin/gcloud builds submit -t ${imageTag} .
                 """
             }
         }
         stage('Run in Cloud RUN') {
             steps {
                 sh """
-                PYTHONUNBUFFERED=1 /snap/bin/gcloud beta run deploy ${appName}-${env.BRANCH_NAME}-${env.BUILD_NUMBER} --image ${imageTag} --platform managed --region us-central1
+                PYTHONUNBUFFERED=1 /usr/bin/gcloud beta run deploy ${appName}-MASTER-${env.BUILD_NUMBER} --image ${imageTag} --platform managed --region us-central1
                 """
             }
         }
