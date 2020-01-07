@@ -3,11 +3,7 @@ def appName = 'test-database'
 def imageTag = "gcr.io/${project}/${appName}:${env.BRANCH_NAME}.${env.BUILD_NUMBER}"
 
 pipeline {
-    agent {
-        node {
-            label('slave-java-01')
-        }
-    }
+    agent any
     stages {
         stage('Download Dependency') {
             steps {
